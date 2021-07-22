@@ -15,8 +15,6 @@ def convert(source_file_location,destination_file_location):
     sub[0]=sub[0][2:len(sub[0])+1]
     sub.append(sub[len(sub)-1])
     file.close
-    
-    a= 0
     for n in sub:
         n = n.strip(' ')
         n = n.strip("[")

@@ -1,4 +1,3 @@
-# Subtitles Creator Beta 0.0
 import os
 def convert(source_file_location,destination_file_location):
     try:
@@ -35,10 +34,7 @@ def convert(source_file_location,destination_file_location):
                    +str(mms_list[a])+" --> "+str(hh_list[a+1])+':'+str(mm_list[a+1])
                    +':'+str(ss_list[a+1])+','+str(mms_list[a+1])+'\n')
         sub2.write(content_list[a]+'\n')
-        
     sub2.close
-        
-convert("test.lrc","test.srt")
 
 
 

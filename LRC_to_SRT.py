@@ -14,7 +14,7 @@ def convert(source_file_location,destination_file_location):
     sub = file.readlines()
     sub[0]=sub[0][2:len(sub[0])+1]
     sub.append(sub[len(sub)-1])
-    file.close
+    file.close()
     for n in sub:
         n = n.strip(' ')
         n = n.strip("[")
@@ -32,7 +32,7 @@ def convert(source_file_location,destination_file_location):
                    +str(mms_list[a])+" --> "+str(hh_list[a+1])+':'+str(mm_list[a+1])
                    +':'+str(ss_list[a+1])+','+str(mms_list[a+1])+'\n')
         sub2.write(content_list[a]+'\n')
-    sub2.close
+    sub2.close()
 
 
 

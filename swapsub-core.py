@@ -22,7 +22,6 @@ def load(path):
         finallist = [hh_list,mm_list,ss_list,mms_list,content_list]
         return(finallist)
     
-    
     if path.split(".")[len(path.split("."))-1]=="srt":
         hh_list = []
         mm_list = []
@@ -93,11 +92,3 @@ def convert(data,path):
             file.write(content_list[a]+'\n')
         file.close()
         
-        
-        
-        
-
-             
-convert(load('test.lrc'),'test4.srt')
-         
-    

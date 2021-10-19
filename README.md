@@ -2,17 +2,24 @@
 这是一个字幕文件格式转换器  
 目前仅支持LRC歌词，SRT视频字幕，TXT三者互转  
 ## 使用方法
-这个项目包含多个组件  
-每个组件实现一种到另一种格式的转换
-如lrc_to_srt srt_to_txt等  
-  
-每个组件内包含一个convert()函数   
-convert函数包含两个参数  
-``convert(source_file_location,destination_file_location)``  
-即source_file_location：源文件路径   
-  destination_file_location：目标文件路径    
-  
-实例：convert("test.lrc","test.srt")  
+
+### load()函数 
+load函数用于加载并预处理字幕文件  
+``load(path)``  
+path:文件路径  
+load()函数将返回一个列表，里面包含里经预处理后的数据  
+
+### convert()函数 
+convert函数用于转换并将转换后的文件储存到指定位置  
+``convert(data,path)``  
+data:load()函数返回的值  
+path:文件路径
+ 
+### 示例
+``sub = load("a.lrc")``  
+``convert(sub,"/home/cybytess/b.srt")``
+
 **注意，路径须包含文件名及扩展名**  
-#### 许可证  
+
+## 许可证  
 MIT License

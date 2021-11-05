@@ -22,4 +22,4 @@ path:文件路径
 **注意，路径须包含文件名及扩展名**  
 
 ## 许可证  
-Mozilla Public License 2.0
+GPL 3.0

@@ -1,6 +1,6 @@
 ## Swapsub-core
 这是一个字幕文件格式转换器  
-目前仅支持LRC歌词，SRT视频字幕，TXT三者互转  
+目前支持LRC，SRT，TXT，ASS四者互转  
 ## 使用方法
 
 ### load()函数 

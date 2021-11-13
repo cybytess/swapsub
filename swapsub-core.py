@@ -55,7 +55,6 @@ def load(path):
 def convert(data,path):
     if path.split(".")[len(path.split("."))-1]=="txt":
         content_list = data[4]
-        print(content_list)
         file = open(path,"w",encoding="utf-8")
         for a in content_list:
             file.write(a)
@@ -69,7 +68,6 @@ def convert(data,path):
         content_list = data[4]
         file = open(path,"w",encoding="utf-8")
         for a in range(len(mm_list)):
-            print(a)
             file.write('['+mm_list[a]+':'+ss_list[a]+'.'+mms_list[a]+']'+content_list[a])
         file.close()
             

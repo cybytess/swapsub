@@ -1,4 +1,4 @@
-## Swapsub core
+## swapsub
 这是一个字幕文件格式转换器  
 支持LRC，SRT，TXT，ASS四者互转  
 ## 使用方法

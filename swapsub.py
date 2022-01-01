@@ -7,7 +7,7 @@ def load(path):
         content_list = []
         file = open(path,"r",encoding="utf-8")
         sub = file.readlines()
-        sub[0]=sub[0][2:len(sub[0])+1]
+        sub[0]=sub[0][1:len(sub[0])+1]
         file.close()
         for n in sub:
             n = n.strip(" ")
@@ -89,4 +89,3 @@ def convert(data,path):
                        +':'+str(ss_list[a+1])+','+str(mms_list[a+1])+'\n')
             file.write(content_list[a]+'\n')
         file.close()
-        

@@ -3,7 +3,7 @@
 支持LRC，SRT，TXT三者互转  
 
 ## 安装
-推荐使用pip包管理器进行安装  
+推荐使用pip包管理器进行安装  [在PyPi上浏览](https://pypi.org/project/swapsub/) 
 ```
 pip install swapsub
 ```  

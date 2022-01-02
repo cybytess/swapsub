@@ -10,7 +10,7 @@ pip install swapsub
 
 ## 使用方法
 
-## 导入swapsub
+### 导入swapsub
 ```python
 import swapsub
 ```  

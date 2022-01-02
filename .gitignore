@@ -8,3 +8,6 @@ test4.lrc
 .idea/Swapsub-core.iml
 .idea/vcs.xml
 .idea/dictionaries/abc.xml
+build/*
+dist/*
+swapsub.egg-info/*

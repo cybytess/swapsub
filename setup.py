@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as f:
-  long_description = f.read()
+    long_description = f.read()
 
 setup(
     name="swapsub",
@@ -12,19 +12,21 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
 
-    url="https://github.com/cybytess/swapsub", 
+    url="https://github.com/cybytess/swapsub",
 
-    packages=find_packages(where='swapsub/'),
-    
-    classifiers = [
+    packages=find_packages(),
+
+    classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3 ',
         'Topic :: Multimedia :: Sound/Audio',
         'Topic :: Multimedia :: Video',
         'Intended Audience :: Customer Service',
-        'Intended Audience :: Developers'
-        ]
-    
-    
+        'Intended Audience :: Developers',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: MacOS',
+        'Operating System :: Unix'
+    ]
+
 )

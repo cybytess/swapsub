@@ -1,15 +1,9 @@
 import sys
 
 def load(path):
-    hh_starts = []
-    mm_starts = []
-    ss_starts = []
-    mms_starts = []
+    start_time = []
+    end_time = []
     content_list = []
-    hh_ends = []
-    mm_ends = []
-    ss_ends = []
-    mms_ends = []
     file = open(path, "r", encoding="utf-8")
     sub = file.readlines()
     file.close()
@@ -17,83 +11,81 @@ def load(path):
     if path.split(".")[len(path.split(".")) - 1] == "lrc":
         a = 0
         for n in sub:
+            end = 0
+            start = 0
             n = n.strip(" ")
             n = n.strip("[")
             content = n.split("]")[1]
             time = n.split("]")[0]
-            hh_starts.append(str(int(time.split(':')[0]) // 60).rjust(2, '0'))
-            mm_starts.append(str(int(time.split(':')[0]) % 60).rjust(2, '0'))
-            ss_starts.append(
-                str(time.split(':')[1].split('.')[0]).rjust(2, '0'))
-            mms_starts.append(
-                str(time.split(':')[1].split('.')[1]).ljust(3, '0'))
+            start += (int(time.split(':')[0]))*60
+            start += (float(time.split(':')[1]))*1
+            start_time.append(start)
             content_list.append(content)
 
             if a == len(sub)-1:
                 timenext = sub[a].strip("[").split("]")[0]
-                ss_ends.append(
-                    str(int(timenext.split(':')[1].split('.')[0])+3).rjust(2, '0'))
+                end += (float(timenext.split(':')[1])+3)*1
             else:
                 timenext = sub[a+1].strip("[").split("]")[0]
-                ss_ends.append(
-                    str(timenext.split(':')[1].split('.')[0]).rjust(2, '0'))
-            hh_ends.append(
-                str(int(timenext.split(':')[0]) // 60).rjust(2, '0'))
-            mm_ends.append(str(int(timenext.split(':')[0]) % 60).rjust(2, '0'))
-            mms_ends.append(
-                str(timenext.split(':')[1].split('.')[1]).ljust(3, '0'))
-
+                end += float(timenext.split(':')[1])*1
+            end += (int(timenext.split(':')[0]))*60
+            end_time.append(end)
+            
             a = a+1
 
-        final_list = [hh_starts, mm_starts, ss_starts, mms_starts,
-                      hh_ends, mm_ends, ss_ends, mms_ends,
-                      content_list]
-        return final_list
 
     elif path.split(".")[len(path.split(".")) - 1] == "srt":
         a = 0
         for n in sub:
             n = n.strip('\n')
             if n.isdecimal():
+                end = 0
+                start = 0
+                
                 time = sub[int(a) + 1].split(' --> ')[0]
-                hh = str((time.split(':')[0]))
-                mm = str((time.split(':')[1]))
-                ss = str(time.split(',')[0].split(':')[2])
-                mms = str(time.split(',')[1])
+                start += int((time.split(':')[0]))*3600
+                start += int((time.split(':')[1]))*60
+                start += float(str(time.split(',')[0].split(':')[2])+"."+str(time.split(',')[1]))*1
                 content = sub[a + 2]
-                hh_starts.append(hh)
-                mm_starts.append(mm)
-                ss_starts.append(ss)
-                mms_starts.append(mms)
+                start_time.append(start)
                 content_list.append(content)
+                
                 time = sub[int(a) + 1].split(' --> ')[1]
-                hh = str((time.split(':')[0]))
-                mm = str((time.split(':')[1]))
-                ss = str(time.split(',')[0].split(':')[2])
-                mms = str(time.split(',')[1].strip("\n"))
-                hh_ends.append(hh)
-                mm_ends.append(mm)
-                ss_ends.append(ss)
-                mms_ends.append(mms)
-
+                end += int((time.split(':')[0]))*3600
+                end += int((time.split(':')[1]))*60
+                end += float(str(time.split(',')[0].split(':')[2])+"."+str(time.split(',')[1]))*1
+                end_time.append(end)
+        
+                
             a = a + 1
-        final_list = [hh_starts, mm_starts, ss_starts, mms_starts,
-                      hh_ends, mm_ends, ss_ends, mms_ends,
-                      content_list]
-        return final_list
+    
+    elif path.split(".")[len(path.split(".")) - 1] == "ass":
+        for n in sub:
+            start = 0
+            end = 0
+            if n[0:8] == 'Dialogue':
+                start += int(n.split(',')[1].split(':')[0])*3600
+                start += int(n.split(',')[1].split(':')[1])*60
+                start += float(n.split(',')[1].split(':')[2])
+                start_time.append(start)
+                
+                end += int(n.split(',')[2].split(':')[0])*3600
+                end += int(n.split(',')[2].split(':')[1])*60
+                end += float(n.split(',')[2].split(':')[2])
+                end_time.append(end)
+                
+                content_list.append(n.split(',')[9])
+                
+
+    final_list = [start_time,end_time,content_list]
+    return final_list
 
 
 def convert(data, path):
     final = []
-    hh_starts = data[0]
-    mm_starts = data[1]
-    ss_starts = data[2]
-    mms_starts = data[3]
-    hh_ends = data[4]
-    mm_ends = data[5]
-    ss_ends = data[6]
-    mms_ends = data[7]
-    content_list = data[8]
+    start_time = data[0]
+    end_time = data[1]
+    content_list = data[2]
     file = open(path, "w", encoding="utf-8")
 
     if path.split(".")[len(path.split(".")) - 1] == "txt":
@@ -101,17 +93,18 @@ def convert(data, path):
             final.append(a)
 
     if path.split(".")[len(path.split(".")) - 1] == "lrc":
-        for a in range(len(mm_starts)):
-            final.append('[' + mm_starts[a] + ':' + ss_starts[a] +
-                       '.' + mms_starts[a] + ']' + content_list[a])
+        for a in range(len(start_time)):
+            final.append('[' + str(int(start_time[a] // 60)) + ':'
+                         + str(round(start_time[a]%60,3))+ ']' + content_list[a])
 
     if path.split(".")[len(path.split(".")) - 1] == "srt":
-        for a in range(len(hh_starts)):
+        for a in range(len(start_time)):
             final.append(str(a) + '\n')
-            final.append(str(hh_starts[a]) + ':' + str(mm_starts[a]) + ':' + str(ss_starts[a]) + ','
-                       + str(mms_starts[a]) + " --> " +
-                       str(hh_ends[a]) + ':' + str(mm_ends[a])
-                       + ':' + str(ss_ends[a]) + ',' + str(mms_ends[a]) + '\n')
+            final.append(str(int(start_time[a]//3600)) + ':' + str(int(start_time[a]//60))
+                         + ':' + str(round(start_time[a]%60,3)).replace('.',',')
+                        + " --> " +
+                        str(int(end_time[a]//3600)) + ':' + str(int(end_time[a]//60))
+                         + ':' + str(round(end_time[a]%60,3)).replace('.',',')+'\n')
             final.append(content_list[a] + '\n')
 
     if path.split(".")[len(path.split(".")) - 1] == "ass":
@@ -124,23 +117,23 @@ def convert(data, path):
                    "Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Default,Arial,20,&H00FFFFFF,"
                    "&H000080FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,2,2,10,10,20,0\n\n"
                    "[Events]\nFormat: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text\n")
-        for a in range(len(hh_starts)):
+        for a in range(len(start_time)):
             final.append("Dialogue:")
             final.append("0,")
             final.append(
-                str(int(hh_starts[a]) + 0) + ":" + str(mm_starts[a]) + ":" + str(ss_starts[a]) + "." + str(
-                    mms_starts[a]) + "," +
-                str(int(hh_ends[a]) + 0) + ":" + str(mm_ends[a]) +
-                ":" + str(ss_ends[a]) + "." + str(mms_ends[a])
+                str(int(start_time[a]//3600)) + ":" + str(int(start_time[a]//60))
+                + ":" + str(round(start_time[a]%60,3)) + "," +           
+                str(int(end_time[a]//3600)) + ":" + str(int(end_time[a]//60)) +
+                ":" + str(round(start_time[a]%60,3))
                 + ",Default,,0,0,0,," + content_list[a])
     for a in final:
         file.write(a)
     file.close()
     return 1
 
-if len(sys.argv) != 3:
-    print("[ERROR]  Invalid parameter\n",
-            "swapsub [source file path]  [file save path]")
+if len(sys.argv) != 3  :
+    #print("[ERROR]  Invalid parameter\n",
+            #"swapsub <source path>  <target path>")
 else:
     if convert(load(sys.argv[1]),sys.argv[2]):
         print("done")

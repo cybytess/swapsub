@@ -1,3 +1,5 @@
+import sys
+
 def load(path):
     hh_starts = []
     mm_starts = []
@@ -82,6 +84,7 @@ def load(path):
 
 
 def convert(data, path):
+    final = []
     hh_starts = data[0]
     mm_starts = data[1]
     ss_starts = data[2]
@@ -95,24 +98,24 @@ def convert(data, path):
 
     if path.split(".")[len(path.split(".")) - 1] == "txt":
         for a in content_list:
-            file.write(a)
+            final.append(a)
 
     if path.split(".")[len(path.split(".")) - 1] == "lrc":
         for a in range(len(mm_starts)):
-            file.write('[' + mm_starts[a] + ':' + ss_starts[a] +
+            final.append('[' + mm_starts[a] + ':' + ss_starts[a] +
                        '.' + mms_starts[a] + ']' + content_list[a])
 
     if path.split(".")[len(path.split(".")) - 1] == "srt":
         for a in range(len(hh_starts)):
-            file.write(str(a) + '\n')
-            file.write(str(hh_starts[a]) + ':' + str(mm_starts[a]) + ':' + str(ss_starts[a]) + ','
+            final.append(str(a) + '\n')
+            final.append(str(hh_starts[a]) + ':' + str(mm_starts[a]) + ':' + str(ss_starts[a]) + ','
                        + str(mms_starts[a]) + " --> " +
                        str(hh_ends[a]) + ':' + str(mm_ends[a])
                        + ':' + str(ss_ends[a]) + ',' + str(mms_ends[a]) + '\n')
-            file.write(content_list[a] + '\n')
+            final.append(content_list[a] + '\n')
 
     if path.split(".")[len(path.split(".")) - 1] == "ass":
-        file.write("[Script Info]\nTitle: <untitled>\nScriptType: v4.00+\n"
+        final.append("[Script Info]\nTitle: <untitled>\nScriptType: v4.00+\n"
                    "Collisions: Normal\n"
                    "PlayDepth: 0\n\n"
                    "[v4+ Styles]\n"
@@ -122,12 +125,22 @@ def convert(data, path):
                    "&H000080FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,2,2,10,10,20,0\n\n"
                    "[Events]\nFormat: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text\n")
         for a in range(len(hh_starts)):
-            file.write("Dialogue:")
-            file.write("0,")
-            file.write(
+            final.append("Dialogue:")
+            final.append("0,")
+            final.append(
                 str(int(hh_starts[a]) + 0) + ":" + str(mm_starts[a]) + ":" + str(ss_starts[a]) + "." + str(
                     mms_starts[a]) + "," +
                 str(int(hh_ends[a]) + 0) + ":" + str(mm_ends[a]) +
                 ":" + str(ss_ends[a]) + "." + str(mms_ends[a])
                 + ",Default,,0,0,0,," + content_list[a])
+    for a in final:
+        file.write(a)
     file.close()
+    return 1
+
+if len(sys.argv) != 3:
+    print("[ERROR]  Invalid parameter\n",
+            "swapsub [source file path]  [file save path]")
+else:
+    if convert(load(sys.argv[1]),sys.argv[2]):
+        print("done")

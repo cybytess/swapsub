@@ -100,10 +100,11 @@ def convert(data, path):
     if path.split(".")[len(path.split(".")) - 1] == "srt":
         for a in range(len(start_time)):
             final.append(str(a) + '\n')
-            final.append(str(int(start_time[a]//3600)) + ':' + str(int(start_time[a]//60))
-                         + ':' + str(round(start_time[a]%60,3)).replace('.',',')
+            final.append(str(int(start_time[a]//3600)).zfill(2)+
+                         ':' + str(int(start_time[a]//60)).zfill(2)+
+                          ':' + str(round(start_time[a]%60,3)).replace('.',',')
                         + " --> " +
-                        str(int(end_time[a]//3600)) + ':' + str(int(end_time[a]//60))
+                        str(int(end_time[a]//3600)).zfill(2) + ':' + str(int(end_time[a]//60)).zfill(2)
                          + ':' + str(round(end_time[a]%60,3)).replace('.',',')+'\n')
             final.append(content_list[a] + '\n')
 
@@ -121,19 +122,20 @@ def convert(data, path):
             final.append("Dialogue:")
             final.append("0,")
             final.append(
-                str(int(start_time[a]//3600)) + ":" + str(int(start_time[a]//60))
-                + ":" + str(round(start_time[a]%60,3)) + "," +           
-                str(int(end_time[a]//3600)) + ":" + str(int(end_time[a]//60)) +
-                ":" + str(round(start_time[a]%60,3))
+                str(int(start_time[a]//3600)).zfill(2) + ":" + str(int(start_time[a]//60)).zfill(2)
+                + ":" + str(round(start_time[a]%60,3)).zfill(2) + "," +           
+                str(int(end_time[a]//3600)).zfill(2) + ":" + str(int(end_time[a]//60)).zfill(2) +
+                ":" + str(round(start_time[a]%60,3)).zfill(2)
                 + ",Default,,0,0,0,," + content_list[a])
     for a in final:
         file.write(a)
     file.close()
-    return 1
+    return 0
 
-if len(sys.argv) != 3  :
-    #print("[ERROR]  Invalid parameter\n",
-            #"swapsub <source path>  <target path>")
-else:
-    if convert(load(sys.argv[1]),sys.argv[2]):
+if __name__ == '__main__' :
+        
+    if len(sys.argv) != 3 :
+        print("[ERROR]  Invalid parameter\n",
+                "swapsub <source path>  <target path>")
+    elif swapsub.convert(swapsub.load(sys.argv[1]),sys.argv[2]) == 0:
         print("done")
